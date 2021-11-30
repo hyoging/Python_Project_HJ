@@ -1,9 +1,13 @@
+import tkinter
 import tkinter as tk
 import random
 import os
 
 # Design parameters, color in Hex
+from tkinter import messagebox
+from tkinter import *
 import pygame
+
 pygame.init()
 
 GRID_COLOR = "#a6bdbb"
@@ -28,6 +32,38 @@ CELL_COLORS = {
         2048: '#edc22e', 4096: '#249a91'}
 CELL_NUMBER_COLORS = {2: "#695c57", 4: "#695c57", 8: "#ffffff"}
 CELL_NUMBER_FONTS = ("Helvetica", 15, "bold")
+
+# def save_history(answer, count, name):
+#     with open('.txt', 'a', encoding='utf-8') as f:
+#         f.write(f'{answer}:{count}:{name}\n')
+
+# def dfd(self):
+#     self.window = tkinter.Toplevel()
+#     self.window.winfo_geometry("1200x600")
+#     f = open("2048_game.txt", 'r', encoding="UTF-8")
+#     text = f.read()
+#     label = tkinter.Label(self.window, text= text)
+#     label.pack()
+#
+#     def show_score(self, text): #파일 저장하는 함수
+#         f = open('score.txt','a')
+#         f.write(text+"\n")
+#         messagebox.showwarning('저장완료', '저장되었습니다') #메세지 박스 출력
+#         self.window.destroy() #화면 창 끄기
+#
+#     def mychart(self): #명대사 저장하기 위해 입력하는 창
+#             self.window = tkinter.Toplevel()
+#             self.window.geometry("800x400")
+#
+#             label1 = Label(self.window, text = "인상 깊게 본 명대사를 써주세요!")
+#             str = StringVar()
+#             textbox = Entry(self.window, width=20, textvariable=str)
+#             label1.pack()
+#             textbox.pack()
+#             button_sa = tkinter.Button(self.window, height=6, width=10, text="저장", command=lambda:self.spoReviewSaved(str.get()))
+#             button_sa.pack()
+#             self.window.mainloop()
+
 
 
 class Game(tk.Frame):
@@ -64,7 +100,7 @@ class Game(tk.Frame):
             row = []
             for j in range(self.grid_size):
                 cell_frame = tk.Frame(
-                    self.main_grid, bg=EMPTY_CELL_COLOR, width=80,        height=80)
+                    self.main_grid, bg=EMPTY_CELL_COLOR, width=80,height=80)
                 cell_frame.grid(row=i, column=j, padx=5, pady=5)
                 cell_number = tk.Label(self.main_grid, bg=EMPTY_CELL_COLOR)
                 cell_number.grid(row=i, column=j)
@@ -83,8 +119,7 @@ class Game(tk.Frame):
         tk.Label(
             act_frame,
             text="2048",
-            font=SCORE_LABEL_FONT,
-        ).grid(row=0)
+            font=SCORE_LABEL_FONT,).grid(row=0)
 
         self.score = 0
         self.bstScore = 0
@@ -93,11 +128,7 @@ class Game(tk.Frame):
                 self.bstScore = int(f.read())
         score_frame = tk.Frame(self)
         score_frame.place(relx=0.5, y=45, anchor="center")
-        tk.Label(
-            score_frame,
-            text="Score",
-            font=SCORE_LABEL_FONT,
-        ).grid(row=0)
+        tk.Label(score_frame,text="Score",font=SCORE_LABEL_FONT,).grid(row=0)
         self.score_label = tk.Label(score_frame, text=self.score, font=SCORE_FONT)
         self.score_label.grid(row=1)
         record_frame = tk.Frame(self)
@@ -114,13 +145,13 @@ class Game(tk.Frame):
 
     def create_button(self):
         button = tk.Button(self, text='New Game', command=lambda: self.new_game())
+        button1 = tk.Button(self, text='Scores', command=lambda : self.update_GUI())
         button.place(relx=0.1, rely=0.10, anchor="center")
-
+        button1.place(relx=0.1, rely=0.17, anchor="center")
 
     def new_game(self):
         self.make_GUI()
         self.start_game()
-
 
     def start_game(self):
         self.matrix = [[0] * self.grid_size for _ in range(self.grid_size)]
@@ -252,7 +283,6 @@ class Game(tk.Frame):
         l.grid(row=0, column=0)
         b = tk.Button(popup_win, text="Ok", command=popup_win.destroy)
         b.grid(row=1, column=0)
-
 
     def left(self, event):
         self.stack()
