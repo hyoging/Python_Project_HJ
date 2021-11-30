@@ -75,10 +75,7 @@ def CheckCollision(player, star):
     if isGameOver:
         return
     for rec in star:
-        if rec.top < player.bottom \
-                and player.top < rec.bottom \
-                and rec.left < (player.right-8) \
-                and (player.left+8) < rec.right:
+        if rec.top < player.bottom and player.top < rec.bottom and rec.left < (player.right-8) and (player.left+8) < rec.right:
             isGameOver = True
             break
     score += 1
@@ -101,10 +98,9 @@ def setText(isupdate=False):
         f'score : {score}', True, 'green'), (10, 10, 0, 0))
 
     if isupdate:
-        SCREEN.blit(myFont.render(
-            f'Game Over!!', True, 'red'), (150, 300, 0, 0))
-        SCREEN.blit(myFont.render(
-            f'press R - Restart', True, 'red'), (140, 320, 0, 0))
+        SCREEN.blit(myFont.render(f'Game Over!!', True, 'red'), (150, 300, 0, 0))
+        SCREEN.blit(myFont.render(f'press R - Restart', True, 'red'), (140, 320, 0, 0))
+
 #########################################################
 #########################################################
 
@@ -123,17 +119,17 @@ time4SecToggle = False
 ##2. 스크린
 pygame.init()
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("CodingNow!!")
+pygame.display.set_caption("avoid")
 #########################################################
 ##3. player
-player = pygame.image.load("Player.png")
+player = pygame.image.load("img_/img/Player.png")
 player = pygame.transform.scale(player, (20, 30))
 rectPlayer = player.get_rect()
 rectPlayer.centerx = (SCREEN_WIDTH / 2)
 rectPlayer.centery = (SCREEN_HEIGHT / 2)
 #########################################################
 ##4. 유성
-star = [pygame.image.load("star.png") for i in range(20)]
+star = [pygame.image.load("img_/img/star.png") for i in range(20)]
 rectStar = [None for i in range(len(star))]
 for i in range(len(star)):
     star[i] = pygame.transform.scale(star[i], (20, 20))
@@ -145,7 +141,7 @@ clock = pygame.time.Clock()
 
 while isActive:
 #1. 화면 검정색으로 지우기
-    SCREEN.fill((0, 0, 0))
+    SCREEN.fill((255, 255, 255))
 #2. 이번트처리
     eventProcess(move)
 #3. 플레이어
