@@ -33,39 +33,6 @@ CELL_COLORS = {
 CELL_NUMBER_COLORS = {2: "#695c57", 4: "#695c57", 8: "#ffffff"}
 CELL_NUMBER_FONTS = ("Helvetica", 15, "bold")
 
-# def save_history(answer, count, name):
-#     with open('.txt', 'a', encoding='utf-8') as f:
-#         f.write(f'{answer}:{count}:{name}\n')
-
-# def dfd(self):
-#     self.window = tkinter.Toplevel()
-#     self.window.winfo_geometry("1200x600")
-#     f = open("2048_game.txt", 'r', encoding="UTF-8")
-#     text = f.read()
-#     label = tkinter.Label(self.window, text= text)
-#     label.pack()
-#
-#     def show_score(self, text): #파일 저장하는 함수
-#         f = open('score.txt','a')
-#         f.write(text+"\n")
-#         messagebox.showwarning('저장완료', '저장되었습니다') #메세지 박스 출력
-#         self.window.destroy() #화면 창 끄기
-#
-#     def mychart(self): #명대사 저장하기 위해 입력하는 창
-#             self.window = tkinter.Toplevel()
-#             self.window.geometry("800x400")
-#
-#             label1 = Label(self.window, text = "인상 깊게 본 명대사를 써주세요!")
-#             str = StringVar()
-#             textbox = Entry(self.window, width=20, textvariable=str)
-#             label1.pack()
-#             textbox.pack()
-#             button_sa = tkinter.Button(self.window, height=6, width=10, text="저장", command=lambda:self.spoReviewSaved(str.get()))
-#             button_sa.pack()
-#             self.window.mainloop()
-
-
-
 class Game(tk.Frame):
     def __init__(self):
         # Set main window
@@ -121,10 +88,18 @@ class Game(tk.Frame):
             text="2048",
             font=SCORE_LABEL_FONT,).grid(row=0)
 
+        button1 = tk.Button(self, text='Scores', command=lambda: self.score())
+        button1.place(relx=0.1, rely=0.17, anchor="center")
+
         self.score = 0
         self.bstScore = 0
-        if os.path.exists("bestscore.ini"):
-            with open("bestscore.ini", "r") as f:
+
+        # if os.path.exists("score.txt"):
+        #     with open("score.txt", "r", encoding='utf-8') as f:
+        #         self.score = int(f.read())
+
+        if os.path.exists("bestscore.txt"):
+            with open("bestscore.txt", "r") as f:
                 self.bstScore = int(f.read())
         score_frame = tk.Frame(self)
         score_frame.place(relx=0.5, y=45, anchor="center")
@@ -142,10 +117,18 @@ class Game(tk.Frame):
         self.record_label.grid(row=2)
 
 
+    def get_score(self):
+        self.score = []
+        if os.path.exists("score.txt"):
+            with open("score.txt", "rt", encoding='utf-8') as f:
+                while f.readline():
+                    self.score.append(int(f.readline()))
+        print(self.score)
+        messagebox.showinfo('점수 보여주기',self.score)
 
     def create_button(self):
         button = tk.Button(self, text='New Game', command=lambda: self.new_game())
-        button1 = tk.Button(self, text='Scores', command=lambda : self.update_GUI())
+        button1 = tk.Button(self, text='Scores', command=lambda : self.get_score())
         button.place(relx=0.1, rely=0.10, anchor="center")
         button1.place(relx=0.1, rely=0.17, anchor="center")
 
@@ -176,7 +159,6 @@ class Game(tk.Frame):
             font=CELL_NUMBER_FONTS,
             text="2"
         )
-        self.score = 0
 
     def stack(self):
         new_matrix = [[0] * self.grid_size for _ in range(self.grid_size)]
@@ -197,8 +179,10 @@ class Game(tk.Frame):
                     self.score += self.matrix[row][col]
                     if self.score > self.bstScore:
                         self.bstScore = self.score
-                        with open("bestscore.ini", "w") as f:
+                        with open("bestscore.txt", "w") as f:
                             f.write(str(self.bstScore))
+
+
 
     def reverse(self):
         new_matrix = []
@@ -270,6 +254,8 @@ class Game(tk.Frame):
         # Check if there are no more moves in the grid
         elif not any(0 in row for row in self.matrix) and not self.any_move():
             self.popup("Game Over!!", "Game Over!!")
+            with open("score.txt", "at", encoding='utf-8') as f:
+                f.writelines(str(self.score)+"\n")
 
     def popup (self, win_title, win_message):
         popup_win = tk.Toplevel()
