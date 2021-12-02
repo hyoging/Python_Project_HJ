@@ -10,26 +10,26 @@ import pygame
 
 pygame.init()
 
-GRID_COLOR = "#a6bdbb"
-music = pygame.mixer.Sound('img_/sound/2048.ogg')
+GRID_COLOR = "#E0E6F8"
+# music = pygame.mixer.Sound('img_/sound/2048.ogg')
 # 배경음악 무한 반복
-music.play(-1)
+# music.play(-1)
 
 EMPTY_CELL_COLOR = "#c2b3a9"
 SCORE_LABEL_FONT = ("Verdana", 18)
 SCORE_FONT = ("Helvetica", 24, "bold")
 CELL_COLORS = {
-        2: '#eee4da',
-        4: '#ede0c8',
-        8: '#edc850',
-        16: '#edc53f',
-        32: '#f67c5f',
-        64: '#f65e3b',
-        128: '#edcf72',
-        256: '#edcc61',
-        512: '#f2b179',
-        1024: '#f59563',
-        2048: '#edc22e', 4096: '#249a91'}
+    2: '#F88877',
+    4: '#F8A964',
+    8: '#E3E862',
+    16: '#BFF876',
+    32: '#81F8CC',
+    64: '#80C9FA',
+    128: '#838FFD',
+    256: '#AD84F3',
+    512: '#ECA0F8',
+    1024: '#FB8AD7',
+    2048: '#F398B2', 4096: '#D2BEF8'}
 CELL_NUMBER_COLORS = {2: "#695c57", 4: "#695c57", 8: "#ffffff"}
 CELL_NUMBER_FONTS = ("Helvetica", 15, "bold")
 
@@ -123,6 +123,7 @@ class Game(tk.Frame):
             with open("score.txt", "rt", encoding='utf-8') as f:
                 while f.readline():
                     self.score.append(int(f.readline()))
+
         print(self.score)
         messagebox.showinfo('점수 보여주기',self.score)
 
@@ -246,16 +247,17 @@ class Game(tk.Frame):
         return False
 
     def game_over(self):
-        # Check if tovalue is reached
+        # 총 점수 확인
         if any(self.top_value in row for row in self.matrix):
             text = f"You did {self.top_value}!!"
-            self.popup(text, text + " Cotinue?")
+            self.popup(text, text + " Countinue?")
             self.top_value = self.top_value*2
         # Check if there are no more moves in the grid
-        elif not any(0 in row for row in self.matrix) and not self.any_move():
+        elif not any(0 in row for row in self.matrix) and not self.any_move() :
             self.popup("Game Over!!", "Game Over!!")
             with open("score.txt", "at", encoding='utf-8') as f:
                 f.writelines(str(self.score)+"\n")
+
 
     def popup (self, win_title, win_message):
         popup_win = tk.Toplevel()
@@ -314,5 +316,5 @@ class Game(tk.Frame):
         self.update_GUI()
         self.game_over()
 
-if __name__ == "__main__":
-    Game()
+# if __name__ == "__main__":
+#     Game()
